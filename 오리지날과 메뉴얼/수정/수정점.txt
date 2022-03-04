@@ -1,0 +1,4 @@
+_delete, _update, _select 함수
+
+Conditional, Set
+매개변수의 = 양 옆에 띄어쓰기를 쓸 시에 제대로 인식이 안되던 점 해결
