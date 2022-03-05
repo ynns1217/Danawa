@@ -6,7 +6,7 @@ int main() {
 	char* values = "NULL, 800, '키보드', NULL , 4 ,0,0,0";
 	char* values1 = "NULL, 500, '마우스', NULL , 10 ,0,0,0";
 	char* set = "name_item = '키보드'";
-	char* conditional=getchar();
+	//char* conditional=getchar();
 	char* select_column = "name_item, bill, date, num_item ";
 
 	result* _result;
