@@ -1,5 +1,6 @@
 #include "local.h"
 
+
 int recv_result(result** result_head, char* receive) {
 	result* cur;
 	char* recv = (char*)malloc(strlen(receive) + 1);
@@ -333,6 +334,7 @@ int recv_result(result** result_head, char* receive) {
 
 	return result_count;
 }
+
 result* find_result(result* result_head, char* column_name) {
 	result* find;
 	find = result_head;
@@ -350,6 +352,7 @@ result* find_result(result* result_head, char* column_name) {
 		}
 	}
 }
+
 void result_print(result* result_head, int result_count) {
 	result* cur;
 	cur = result_head;
@@ -404,6 +407,7 @@ void result_print(result* result_head, int result_count) {
 		printf("\n");
 	}
 }
+
 int int_is_null(int _int_data) {
 	if (_int_data == INT_MAX)
 		return 1;
