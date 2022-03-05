@@ -101,10 +101,7 @@ int main() {
 					system("pause");
 
 					printf("검색할 품명을 입력하시오\n");
-					char condition[20] = { 0 };
-					scnaf("%s", condition);
-					getchar();					
-					char* conditional = condition;
+
 					
 
 					//조건에 맞는 레코드를 전부 찾아 해당 레코드의 원하는 컬럼의 값만 추출하는 함수//				
