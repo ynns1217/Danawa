@@ -3,12 +3,12 @@
 
 int main() {
 
-	char* values = "NULL, 800, '키보드', 800, NULL , 4 ,0,0,0";
+	char* values = "NULL, 800, '키보드', 800, NULL , 4 ,0,0,5";
 	char* values1 = "NULL, 500, '마우스', 500, NULL , 10 ,0,0,0";
 	char* values2 = "NULL, 600, '모니터1', 600, NULL , 10 ,0,0,0";
 	char* values3 = "NULL, 700, '모니터2', 700, NULL , 10 ,0,0,0";
 
-	char* values00 = "NULL, 800, NULL, 800, '키보드', 800, NULL , 4 ,0,0,0";
+	char* values00 = "NULL, 800, NULL, 800, '키보드', 800, NULL , 4 ,0,0,5";
 	char* values01 = "NULL, 500, NULL, 500, '마우스', 500, NULL , 10 ,0,0,0";
 	char* values02 = "NULL, 600, NULL, 600, '모니터1', 600, NULL , 10 ,0,0,0";
 	char* values03 = "NULL, 700, NULL, 700, '모니터2', 700, NULL , 10 ,0,0,0";
@@ -28,7 +28,7 @@ int main() {
 	{
 		system("cls");
 		printf("\t재고관리\n");
-		printf("1.재고조회 2.재고등록 3.재고이동\n");
+		printf("1.재고조회 2.재고등록 \n");
 		printf("======================================\n");
 		scanf("%d", &option1);
 		system("cls");
@@ -53,6 +53,7 @@ int main() {
 			case 1:
 				//사업장 재고 테이블 (재고등록 + 조회 + 재고 이동)
 				if (_create("Stock_In_Factory", "name_factory VARCHAR(20) num_factory INT name_item VARCHAR(20) num_item INT name_responsible VARCHAR(20) num_responsible INT bill INT date INT count_item INT") == -1)
+
 				{
 					printf("%s\n", err_msg);
 
@@ -107,6 +108,7 @@ int main() {
 				{
 					print_data();
 					printf("\n");
+					file_column_free();
 					system("pause");
 
 				}
@@ -176,12 +178,12 @@ int main() {
 					break;
 				}
 			break;
-			file_column_free();
+			
 
 			case 2:
 
 				/// ///////////////////////////////////////////////////////////////////
-				/// ///////////////////////////////////////////////////////////////////
+				/// 창고 재고 테이블 (재고 등록 + 조회 + 재고이동)
 
 				if (_create("Stock_In_Warehouse", "name_factory VARCHAR(20) num_factory INT name_warehouse VARCHAR(20) num_warehouse INT name_item VARCHAR(20) num_item INT name_responsible VARCHAR(20) num_responsible INT bill INT date INT count_item INT") == -1)
 				{
@@ -190,12 +192,14 @@ int main() {
 					return -1;
 				}
 
+				//파일 초기화
 				if (initalizing("C:\\Users\\PKNU\\source\\repos\\Danawa\\Stock_In_Warehouse") == -1) {
 					printf("%s\n", err_msg);
 
 					file_column_free();
 					return -1;
 				}
+
 
 				//테이블에 데이터 입력하는 함수//
 				if (_insert(values00) == -1) {
@@ -237,6 +241,7 @@ int main() {
 				{
 					print_data();
 					printf("\n");
+					file_column_free();
 					system("pause");
 
 				}
@@ -302,18 +307,14 @@ int main() {
 					file_column_free();
 				}
 				else
-				{
 					break;
-				}
 				break;
-				file_column_free();
 
 			default:
 				break;
 			}
 
 			break;
-			file_column_free();
 
 
 		case 2:
@@ -321,6 +322,18 @@ int main() {
 			printf("1.사업장 2.창고 \n");
 			printf("======================================\n");
 			scanf("%d", &option2);
+
+			switch (option2)
+			{
+			case 1:
+				break;
+			case 2:
+				break;
+			default:
+				break;
+			}
+
+
 
 			break;
 
@@ -330,11 +343,113 @@ int main() {
 			printf("======================================\n");
 			scanf("%d", &option2);
 
-			break;
+			switch (option2)
+			{
+			case 1:
+				//파일 초기화
+				if (initalizing("C:\\Users\\PKNU\\source\\repos\\Danawa\\Stock_In_Factory") == -1) {
+					printf("%s\n", err_msg);
 
+					file_column_free();
+					return -1;
+				}
+
+				printf("\t사업장\n");
+				printf("======================================\n");
+				printf("검색해서 삭제 \n");
+				printf("======================================\n");
+
+					print_data();
+					system("pause");
+
+					char temp_insert[100];
+					char Select_IT[100];
+
+					printf("검색할 품명을 입력하시오\n");
+					scanf("%s", &Select_IT);
+
+					char select_num_item[100] = "num_item=";
+					char Parameter_Insert[1000] = { NULL };
+					char temp_int[20] = { 0 };
+					strcat(select_num_item, Select_IT);	// select함수에 조건으로 입력하기 위한 양식만들기
+																// ex) 여기까지 [select_num_warehouse = num_warehouse=1999]
+
+					if (_select(select_num_item, "name_item, num_item, count_item", &select_result_str) == -1) {	// 만든 양식을 토대로 창고목록에서 내부 칼럼정보를 선택해 받아옴
+						printf("%s\n", err_msg);
+
+						file_column_free();
+						return -1;
+					}
+					else
+					{
+						printf("%s\n\n", select_result_str);
+					}
+
+					//_select함수에서 저장된 문자열(select_result_str)을 result_column 구조체에 해당 타입에 맞춰 배열 형태로 정리하여 저장
+
+					if ((result_count = recv_result(&_result, select_result_str)) == -1) {		// select로 받아온 정보를 _result 포인트 구조체에 멤버로 저장함
+						printf("%s\n", err_msg);
+
+						file_column_free();
+						return -1;
+					}
+
+
+
+					strcat(Parameter_Insert, "\'");							// 문자열의 경우 앞뒤로 작은따옴표 필요
+					strcat(Parameter_Insert, *(_result->_string_data));		// 받아온 결과를 저장
+					strcat(Parameter_Insert, "\' ");						// 문자열의 경우 앞뒤로 작은따옴표 필요 + 끝났음을 의미하는 띄어쓰기
+
+																			// ex) 여기까지 [Parameter_Insert = 'warehouse1' ]
+
+					itoa(*(_result->next->_int_data), temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+					strcat(Parameter_Insert, temp_int);						// 변환한 문자열을 Parameter_Insert에 붙임
+					strcat(Parameter_Insert, " ");							// 끝났음을 의미하는 띄어쓰기
+																			// ex) 여기까지 [Parameter_Insert = 'warehouse1' 1999 ]
+
+
+					*(_result->next->next->_int_data) -= 1;
+					itoa(*(_result->next->next->_int_data), temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+					strcat(Parameter_Insert, temp_int);						// 변환한 문자열을 Parameter_Insert에 붙임
+					strcat(Parameter_Insert, " ");							// 끝났음을 의미하는 띄어쓰기
+
+																			// ex) 여기까지 [Parameter_Insert = 'warehouse1' 1999 ]
+
+					printf("%s\n", Parameter_Insert);
+					system("pause");
+					printf("\n\n");
+					result_free(_result, result_count);
+
+					file_column_free();
+				break;
+
+			case 2:
+				//파일 초기화
+				if (initalizing("C:\\Users\\PKNU\\source\\repos\\Danawa\\Stock_In_Warehouse") == -1) {
+					printf("%s\n", err_msg);
+
+					file_column_free();
+					return -1;
+				}
+
+				printf("\t창고\n");
+				printf("======================================\n");
+				printf("검색해서 삭제 \n");
+				printf("======================================\n");
+
+				print_data();
+				system("pause");
+
+				break;
+
+			default:
+				break;
+			}
+
+			break;
 		default:
 			break;
-		}
+			}
 
 	}
 }
