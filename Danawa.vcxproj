@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.c" />
+    <ClCompile Include="fuc.c" />
     <ClCompile Include="현재고현황main.c" />
     <ClCompile Include="server.c" />
   </ItemGroup>

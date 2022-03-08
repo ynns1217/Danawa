@@ -1304,7 +1304,7 @@ int print_data() {
 				}
 				else {
 					fread(&i_token, sizeof(int), 1, F);
-					printf("    %d", i_token);
+					printf("%5d%d", i_token);
 				}
 
 				break;
@@ -1320,7 +1320,7 @@ int print_data() {
 				}
 				else {
 					fread(&f_token, sizeof(float), 1, F);
-					printf("    %.5f", f_token);
+					printf("   %.5f", f_token);
 				}
 				break;
 			}
@@ -1365,7 +1365,7 @@ int print_data() {
 				}
 				else {
 					string = strtok(s_token, pad_seprator);
-					printf("    %s", string);
+					printf("%s\t", string);
 				}
 				break;
 			}
