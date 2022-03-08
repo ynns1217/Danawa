@@ -79,7 +79,28 @@ void insert_table()
 		return -1;
 	}
 }
-void edit_table()
+void edit_minus_table()
+{
+	if (initalizing("C:\\Users\\PKNU\\source\\repos\\Danawa\\Stock_In") == -1)
+	{
+		printf("%s\n", err_msg);
+
+		file_column_free();
+		return -1;
+	}
+
+	char* conditional = "num_item=800";
+	char* set = "chulgo_item=5";
+
+	if (_update(conditional, set) == -1)
+	{
+		printf("%s\n", err_msg);
+
+		file_column_free();
+		return -1;
+	}
+}
+void edit_plus_table()
 {
 	if (initalizing("C:\\Users\\PKNU\\source\\repos\\Danawa\\Stock_In") == -1)
 	{
@@ -378,16 +399,12 @@ int main() {
 			printf("======================================\n");
 			scanf("%d", &option1);
 
-			/// ///////////////////////////////////////////////////////////////////
-			/// ///////////////////////////////////////////////////////////////////
-			/// 
 			if (option1 == 1)
 			{
 				//재고관리에 재고현황
 				ibgo_chulgo_count();
 				break;
 			}
-
 			else if (option1 == 2)
 			{
 				jaego_count();
