@@ -43,6 +43,9 @@ void table_init()
 	}
 
 
+}
+void insert_table()
+{
 	//테이블에 데이터 입력하는 함수//
 	if (_insert(values) == -1) {
 		printf("%s\n", err_msg);
@@ -75,9 +78,21 @@ void table_init()
 		file_column_free();
 		return -1;
 	}
-
 }
-void jaego_count() {
+void edit_table()
+{
+	char* conditional = "num_item=800";
+	char* set = "chulgo_item=5";
+
+	if (_update(conditional, set) == -1)
+	{
+		printf("%s\n", err_msg);
+
+		file_column_free();
+		return -1;
+	}
+}
+int jaego_count() {
 	char temp_insert[100];
 	char Select_IT[100];
 
@@ -178,7 +193,7 @@ void jaego_count() {
 			}
 				break;
 		
-
+				return find->_int_data[i];
 	}
 
 	printf("======================================\n");
@@ -187,9 +202,7 @@ void jaego_count() {
 	printf("\n\n");
 	file_column_free();
 
-
 }
-
 
 int main() {
 		//현 재고 테이블 (재고등록 + 조회 + 재고 이동)
@@ -198,6 +211,8 @@ int main() {
 	{
 		system("cls");
 		table_init();
+		insert_table();
+
 		/// ///////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////
 
@@ -226,7 +241,6 @@ int main() {
 			/// 
 			if (option1 == 1)
 			{
-				//파일 초기화
 				printf("\t재고 현황\n");
 				printf("======================================\n");
 				print_data();
@@ -234,18 +248,25 @@ int main() {
 				file_column_free();
 				system("pause");
 				break;
-
 			}
+
 			else if (option1 == 2)
 			{
 				printf("\t총 재고 수량\n");
 				printf("======================================\n");
+
+				if (initalizing("C:\\Users\\PKNU\\source\\repos\\Danawa\\Stock_In") == -1) {
+					printf("%s\n", err_msg);
+
+					file_column_free();
+					return -1;
+				}
+
 				jaego_count();
 				system("pause");
 				result_free(_result, result_count);
 
 				break;
-
 			}
 
 		case 2:
@@ -254,12 +275,8 @@ int main() {
 
 			jaego_count();
 
-			char* conditional = "num_item = 800";
-			char* set = "chulgo_item =5";
-
 			for (int i = 0; i < result_count; i++)
 			{
-
 				if ((find->_int_data[i]) >= 1)
 				{
 					printf("======================================\n");
@@ -272,35 +289,22 @@ int main() {
 						file_column_free();
 						return -1;
 					}
-
-					if (_update(conditional, set) == -1)
-					{
-						printf("%s\n", err_msg);
-
-						file_column_free();
-						return -1;
-					}
-
+					edit_table();
 					jaego_count();
-
 				}
+
 				else
 				{
 					printf("======================================\n");
 					printf("발주하러 가자이\n");
-				}
 
+				}
 			}
 		default:
 			break;
 		}
-	}
-
-
-	
+	}	
 }
-
-
 
 //			//테이블에 데이터 입력하는 함수//
 //if (_insert(values) == -1) {
