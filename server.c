@@ -1304,7 +1304,7 @@ int print_data() {
 				}
 				else {
 					fread(&i_token, sizeof(int), 1, F);
-					printf("%5d%d", i_token);
+					printf("\t%d", i_token);
 				}
 
 				break;
