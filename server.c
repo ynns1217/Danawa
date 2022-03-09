@@ -1299,7 +1299,7 @@ int print_data() {
 				fread(IS_NULL, sizeof(char), 4, F);
 				fseek(F, -4, SEEK_CUR);
 				if (!strcmp(IS_NULL, "NULL")) {
-					printf("    (NULL)");
+					printf("\t(NULL)");
 					fseek(F, sizeof(int), SEEK_CUR);
 				}
 				else {
@@ -1315,12 +1315,12 @@ int print_data() {
 				fread(IS_NULL, sizeof(char), 4, F);
 				fseek(F, -4, SEEK_CUR);
 				if (!strcmp(IS_NULL, "NULL")) {
-					printf("    (NULL)");
+					printf("\t(NULL)");
 					fseek(F, sizeof(float), SEEK_CUR);
 				}
 				else {
 					fread(&f_token, sizeof(float), 1, F);
-					printf("   %.5f", f_token);
+					printf("\t%.5f", f_token);
 				}
 				break;
 			}
@@ -1330,12 +1330,12 @@ int print_data() {
 				fread(IS_NULL, sizeof(char), 4, F);
 				fseek(F, -4, SEEK_CUR);
 				if (!strcmp(IS_NULL, "NULL")) {
-					printf("    (NULL)");
+					printf("\t(NULL)");
 					fseek(F, sizeof(double), SEEK_CUR);
 				}
 				else {
 					fread(&d_token, sizeof(double), 1, F);
-					printf("    %.12lf", d_token);
+					printf("\t%.12lf", d_token);
 				}
 				break;
 			}
@@ -1344,9 +1344,9 @@ int print_data() {
 				char c_token;
 				c_token = fgetc(F);
 				if (c_token == pad)
-					printf("    (NULL)");
+					printf("\t(NULL)");
 				else
-					printf("    %c", c_token);
+					printf("\t%c", c_token);
 				break;
 			}
 			case VARCHAR:
@@ -1361,11 +1361,11 @@ int print_data() {
 				fread(s_token, cur->length, 1, F);
 				s_token[cur->length] = '\0';
 				if (s_token[0] == pad) {
-					printf("    (NULL)");
+					printf("\t(NULL)");
 				}
 				else {
 					string = strtok(s_token, pad_seprator);
-					printf("%s\t", string);
+					printf("\t%s", string);
 				}
 				break;
 			}

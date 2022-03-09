@@ -140,11 +140,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.c" />
-    <ClCompile Include="현재고현황main.c" />
+    <ClCompile Include="jaego_fuc.c" />
+    <ClCompile Include="MiniProject_ERP_InitSampleData.c" />
+    <ClCompile Include="현재고현황.c" />
     <ClCompile Include="server.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="local.h" />
+    <ClInclude Include="MiniProject_ERP_struct_warehousing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

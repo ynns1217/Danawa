@@ -18,15 +18,24 @@
     <ClCompile Include="client.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="현재고현황main.c">
+    <ClCompile Include="현재고현황.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="server.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MiniProject_ERP_InitSampleData.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="jaego_fuc.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="local.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniProject_ERP_struct_warehousing.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
