@@ -31,7 +31,6 @@ int jaego_print()
 
 	char Parameter_Insert[1000] = { NULL };
 	char temp_int[20] = { 0 };
-	char Select_BuyingList_num[20] = { 0 };
 
 	
 	if (initalizing("Jaego") == -1)
@@ -43,15 +42,15 @@ int jaego_print()
 	}
 
 
-	for (int Select_BuyingList_num = 1; Select_BuyingList_num < 7; Select_BuyingList_num++)
+	for (int select_List = 1; select_List < 7; select_List++)
 	{
 
-		char select_num_BuyList[100] = "num_jaego=";
-		itoa(Select_BuyingList_num, temp_int, 10);
-		strcat(select_num_BuyList, temp_int);
+		char select_num_List[100] = "num_jaego=";
+		itoa(select_List, temp_int, 10);
+		strcat(select_num_List, temp_int);
 
 
-		if (_select(select_num_BuyList, "num_jaego, name_item, num_item, date, chogi_item, ibgo_item, chulgo_item, jaego_item", &select_result_str) == -1) {
+		if (_select(select_num_List, "num_jaego, name_item, num_item, date, chogi_item, ibgo_item, chulgo_item, jaego_item", &select_result_str) == -1) {
 			printf("%s\n", err_msg);
 
 			file_column_free();
@@ -131,7 +130,7 @@ int jaego_print()
 
 
 		// 입고한 다음 입고 수량 을 업데이트한다
-		if (_update(select_num_BuyList, update_rest_num) == -1)
+		if (_update(select_num_List, update_rest_num) == -1)
 		{
 			printf("%s\n", err_msg);
 
@@ -271,7 +270,7 @@ result* _result;
 	strcat(update_time, temp_int);
 
 
-	// 입고한 다음 입고 재고 수량 을 업데이트한다
+	// 입고한 다음 입고 시간 을 업데이트한다
 	if (_update(select_num_BuyList, update_time) == -1)
 	{
 		printf("%s\n", err_msg);
@@ -286,6 +285,173 @@ result* _result;
 //출고 정보를 불러와서 출고재고에 업데이트
 void chulgo_jaego_print()
 {
+	result* _result;
+	result* find;
+	int result_count;
+	char Select_WH[10];
+
+	time_t timer;
+	struct tm* t;
+	timer = time(NULL);
+	t = localtime(&timer);
+	                     
+	int today_date = 0;
+	today_date = ((t->tm_year + 1900) * 10000) + ((t->tm_mon + 1) * 100) + (t->tm_mday);	// 오늘 날짜( 20220304 꼴 )
+
+	char Parameter_Insert[1000] = { NULL };
+	char temp_int[20] = { 0 };
+	char Select_BuyingList_num[20] = { 0 };
+
+	//1==cpu
+	//2==hard
+	//3 ==keyboard
+	//4 == mainboard
+	//5 == monitor
+	//6 == case
+
+
+		for (int select_List = 1; select_List < 7; select_List++)
+		{
+
+			if (initalizing("Jaego") == -1) {
+				printf("%s\n", err_msg);
+
+				file_column_free();
+				return -1;
+			}
+
+			char select_num_List[100] = "num_jaego=";
+			itoa(select_List, temp_int, 10);
+			strcat(select_num_List, temp_int);
+
+			if (_select(select_num_List, "num_jaego, name_item, num_item, date, chogi_item, ibgo_item, chulgo_item, jaego_item", &select_result_str) == -1) {
+				printf("%s\n", err_msg);
+				system("pause");
+				file_column_free();
+				return -1;
+			}
+
+			if ((result_count = recv_result(&_result, select_result_str)) == -1) {
+				printf("%s\n", err_msg);
+				system("pause");
+				file_column_free();
+				return -1;
+			}
+
+			printf("%s를 출고합니다\n", *(_result->next->_string_data));
+
+			itoa(*(_result->_int_data), temp_int, 10);
+			strcat(Parameter_Insert, temp_int);
+			strcat(Parameter_Insert, ", ");
+
+			// name_item
+			strcat(Parameter_Insert, "\'");
+			strcat(Parameter_Insert, *(_result->next->_string_data));
+			strcat(Parameter_Insert, "\', ");
+
+
+			//num_item
+			strcat(Parameter_Insert, "\'");
+			strcat(Parameter_Insert, *(_result->next->next->_string_data));
+			strcat(Parameter_Insert, "\', ");
+
+
+
+			//date
+			itoa(today_date, temp_int, 10);							// 받아온 정보가 int형이므로 문자열로 형변환수행
+			strcat(Parameter_Insert, temp_int);						// 변환한 문자열을 Parameter_Insert에 붙임
+			strcat(Parameter_Insert, ", ");							// 끝났음을 의미하는 띄어쓰기
+
+
+
+			// 초기재고수량
+			int gicho_data = *(_result->next->next->next->next->_int_data);
+			itoa(gicho_data, temp_int, 10);
+			strcat(Parameter_Insert, temp_int);
+			strcat(Parameter_Insert, ", ");
+
+
+			// 입고재고수량
+			int num_InWarehouse = *(_result->next->next->next->next->next->_int_data);
+			itoa(num_InWarehouse, temp_int, 10);
+			strcat(Parameter_Insert, temp_int);
+			strcat(Parameter_Insert, ", ");
+
+
+			// 출고재고수량
+			int chulgo_data = 0;
+			printf("출고수량을 입력하세요 : ");
+			scanf("%d", &chulgo_data);
+
+			itoa(chulgo_data, temp_int, 10);
+			strcat(Parameter_Insert, temp_int);
+			strcat(Parameter_Insert, ", ");
+
+			// 총 재고수량
+			int jaego_data = gicho_data + num_InWarehouse - chulgo_data;
+			itoa(jaego_data, temp_int, 10);
+			strcat(Parameter_Insert, temp_int);
+
+			file_column_free();
+			result_free(_result, result_count);
+
+
+			if (initalizing("Jaego") == -1) {
+				printf("%s\n", err_msg);
+
+				file_column_free();
+				return -1;
+			}
+
+
+			char update_num[100] = "chulgo_item=";
+			itoa(chulgo_data, temp_int, 10);
+			strcat(update_num, temp_int);
+
+			// 출고 재고 수량 을 업데이트한다
+			if (_update(select_num_List, update_num) == -1)
+			{
+				printf("%s\n", err_msg);
+
+				file_column_free();
+				return -1;
+			}
+
+
+
+			//시간 업데이트
+			char update_time[100] = "date=";
+
+			itoa(today_date, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+			strcat(update_time, temp_int);
+
+
+			if (_update(select_num_List, update_time) == -1)
+			{
+				printf("%s\n", err_msg);
+
+				file_column_free();
+				return -1;
+			}
+
+			jaego_print();
+
+			if (jaego_data <= 1)
+			{
+				int bojuk = chulgo_data + jaego_data;
+				printf("%s가 %d개 부족합니다.", select_List, bojuk);
+				printf("발주하러 가자이이이ㅣㅣ");
+				ibgo_jaego_print1();
+			}
+			else
+			{
+				printf("%s가 %d개 있습니다.", select_List, chulgo_data);
+				printf("생산하러 가자이이ㅣㅣ,,,,가라니까? ,,,ㄱㅏㄹㅏ고,,,,,,,,,ㅅㅂ제발 가라 좀");
+			}
+
+
+		}
+	// 입고리스트 출력 및 정보 받아오기
 
 }
 

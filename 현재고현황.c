@@ -42,32 +42,11 @@ int main() {
 		case 2:
 			printf("\t재고 사용하기 \n");
 			printf("======================================\n");
-
-
-			ibgo_jaego_print1();
-
 			//사용할 재고 입력 
 			// (모든 조건 검색해서 하나라도 있으면 생산하러가고 갯수 하나씩 줄이기)
 			//재고 0 이면 발주로 보내고 입고 받은 재고번호 받아서 update
 			
-			for (int i = 0; i < result_count; i++)
-			{
-				if ((find->_int_data[i]) >= 1)
-				{
-					printf("======================================\n");
-					printf("생산하러 가자이\n");
-
-
-				}
-
-				else
-				{
-					printf("======================================\n");
-					printf("발주하러 가자이\n");
-
-					ibgo_jaego_print1();
-				}
-			}
+			chulgo_jaego_print();
 		default:
 			break;
 		}
