@@ -395,7 +395,8 @@ void chulgo_jaego_print()
 
 		if (jaego_data < 0)
 		{
-			itoa(0, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+			jaego_data = 0;
+			itoa(jaego_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
 			strcat(update_num_jaego, temp_int);
 			if (_update(select_num_chulgoList, update_num_jaego) == -1)
 			{
@@ -405,17 +406,19 @@ void chulgo_jaego_print()
 			}
 		}
 
-
-		itoa(chulgo_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
-		strcat(update_num, temp_int);
-		// 입고한 다음 입고 재고 수량 을 업데이트한다
-		if (_update(select_num_chulgoList, update_num) == -1)
+		else
 		{
-			printf("%s\n", err_msg);
-			file_column_free();
-			return -1;
-		}
+			itoa(chulgo_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+			strcat(update_num, temp_int);
+			// 입고한 다음 입고 재고 수량 을 업데이트한다
+			if (_update(select_num_chulgoList, update_num) == -1)
+			{
+				printf("%s\n", err_msg);
+				file_column_free();
+				return -1;
+			}
 
+		}
 		if (jaego_data < chulgo_data)
 		{
 			printf("%s가 %d개 이상 필요합니다.\n", *(_result->next->_string_data), bujok);
