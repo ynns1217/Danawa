@@ -367,23 +367,7 @@ void chulgo_jaego_print()
 		strcat(Parameter_Insert, temp_int);
 
 
-		printf("%s\n", Parameter_Insert);
-		system("pause");
-
-		file_column_free();
-
-
-		result_free(_result, result_count);
-
-
-
-		if (initalizing("Jaego") == -1)
-		{
-			printf("%s\n", err_msg);
-
-			file_column_free();
-			return -1;
-		}
+	
 
 		char update_num[100] = "chulgo_item=";
 
