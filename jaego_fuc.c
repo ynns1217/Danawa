@@ -133,6 +133,8 @@ int jaego_print()
 	file_column_free();
 
 }
+
+
 //입고 정보를 불러와서 입고재고에 업데이트
 void ibgo_jaego_print()
 {
@@ -252,6 +254,8 @@ void ibgo_jaego_print()
 
 	jaego_print();
 }
+
+
 
 void chulgo_jaego_print()
 {
@@ -408,5 +412,3 @@ void chulgo_jaego_print()
 
 	jaego_print();
 }
-
-
