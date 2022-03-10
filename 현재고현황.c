@@ -6,10 +6,7 @@
 
 #pragma warning(disable:4996)
 
-result* _result;
-result* find;
 
-int result_count;
 int option1, option2, option3;
 
 int main() {
@@ -45,8 +42,13 @@ int main() {
 			//사용할 재고 입력 
 			// (모든 조건 검색해서 하나라도 있으면 생산하러가고 갯수 하나씩 줄이기)
 			//재고 0 이면 발주로 보내고 입고 받은 재고번호 받아서 update
-			
-			chulgo_jaego_print();
+
+
+			ibgo_jaego_print1();
+			//chulgo_jaego_print();
+
+			break;
+
 		default:
 			break;
 		}

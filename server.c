@@ -27,7 +27,6 @@ int initalizing(char* file_name) {
 
 		return -1;
 	}
-
 	strcpy(_file_location, file_name);
 	strcat(_file_location, ".dat");
 	F = fopen(_file_location, "rb");
@@ -259,17 +258,17 @@ int _insert(char* values) {
 			ptr = ptr + index + 1;
 			if (!strcmp(token, "NULL")) {
 				switch (cur->type) {
-				case INT:
-				case FLOAT:
+				case _INT:
+				case _FLOAT:
 					fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 					break;
-				case DOUBLE:
+				case _DOUBLE:
 					fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 					for (unsigned int i = 0; i < (cur->length) - 4; i++)
 						fputc(pad, F);
 					break;
-				case CHAR:
-				case VARCHAR:
+				case _CHAR:
+				case _VARCHAR:
 					for (unsigned int i = 0; i < cur->length; i++)
 						fputc(pad, F);
 					break;
@@ -277,8 +276,8 @@ int _insert(char* values) {
 			}
 			else {
 				switch (cur->type) {
-				case CHAR:
-				case VARCHAR:
+				case _CHAR:
+				case _VARCHAR:
 					if (strlen(token) > cur->length) {
 						strcpy(err_msg, "Value Length Over");
 						free(_values);
@@ -289,14 +288,14 @@ int _insert(char* values) {
 				}
 
 				switch (cur->type) {
-				case INT:
+				case _INT:
 				{
 					int i_token = atoi(token);
 					fwrite(&i_token, sizeof(int), 1, F);
 
 					break;
 				}
-				case DOUBLE:
+				case _DOUBLE:
 				{
 					char* pos = NULL;
 					double d_token = strtod(token, &pos);
@@ -304,7 +303,7 @@ int _insert(char* values) {
 
 					break;
 				}
-				case FLOAT:
+				case _FLOAT:
 				{
 					char* pos = NULL;
 					float f_token = strtof(token, &pos);
@@ -312,13 +311,13 @@ int _insert(char* values) {
 
 					break;
 				}
-				case CHAR:
+				case _CHAR:
 				{
 					char c_token = token[0];
 					fputc(c_token, F);
 					break;
 				}
-				case VARCHAR:
+				case _VARCHAR:
 				{
 					int padding;
 					fputs(token, F);
@@ -335,26 +334,27 @@ int _insert(char* values) {
 			index = 0;
 			IS_STRING = 0;
 			free(tmp);
+			continue;
 		}
 		if (ptr[index] == '\0') {
-			ptr = strtok(ptr, "'");
+			ptr = strtok(ptr, "' ");
 			if (IS_STRING == 2) {
 				if (ptr[0] == ' ')
 					ptr = strtok(NULL, "'");
 			}
 			if (!strcmp(ptr, "NULL")) {
 				switch (cur->type) {
-				case INT:
-				case FLOAT:
+				case _INT:
+				case _FLOAT:
 					fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 					break;
-				case DOUBLE:
+				case _DOUBLE:
 					fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 					for (unsigned int i = 0; i < (cur->length) - 4; i++)
 						fputc(pad, F);
 					break;
-				case CHAR:
-				case VARCHAR:
+				case _CHAR:
+				case _VARCHAR:
 					for (unsigned int i = 0; i < cur->length; i++)
 						fputc(pad, F);
 					break;
@@ -362,8 +362,8 @@ int _insert(char* values) {
 			}
 			else {
 				switch (cur->type) {
-				case CHAR:
-				case VARCHAR:
+				case _CHAR:
+				case _VARCHAR:
 					if (strlen(ptr) > cur->length) {
 						strcpy(err_msg, "Value Length Over");
 						free(_values);
@@ -373,14 +373,14 @@ int _insert(char* values) {
 				}
 
 				switch (cur->type) {
-				case INT:
+				case _INT:
 				{
 					int i_token = atoi(ptr);
 					fwrite(&i_token, sizeof(int), 1, F);
 
 					break;
 				}
-				case DOUBLE:
+				case _DOUBLE:
 				{
 					char* pos = NULL;
 					double d_token = strtod(ptr, &pos);
@@ -388,7 +388,7 @@ int _insert(char* values) {
 
 					break;
 				}
-				case FLOAT:
+				case _FLOAT:
 				{
 					char* pos = NULL;
 					float f_token = strtof(ptr, &pos);
@@ -396,13 +396,13 @@ int _insert(char* values) {
 
 					break;
 				}
-				case CHAR:
+				case _CHAR:
 				{
 					char c_token = ptr[0];
 					fputc(c_token, F);
 					break;
 				}
-				case VARCHAR:
+				case _VARCHAR:
 				{
 					int padding;
 					fputs(ptr, F);
@@ -424,17 +424,17 @@ int _insert(char* values) {
 				while (cur->next != 0) {
 					cur = cur->next;
 					switch (cur->type) {
-					case INT:
-					case FLOAT:
+					case _INT:
+					case _FLOAT:
 						fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 						break;
-					case DOUBLE:
+					case _DOUBLE:
 						fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 						for (unsigned int i = 0; i < (cur->length) - 4; i++)
 							fputc(pad, F);
 						break;
-					case CHAR:
-					case VARCHAR:
+					case _CHAR:
+					case _VARCHAR:
 						for (unsigned int i = 0; i < cur->length; i++)
 							fputc(pad, F);
 						break;
@@ -466,7 +466,7 @@ int _delete(char* conditional) {
 	conditional_value = strtok(NULL, "= \0");
 	while (1) {
 		if (!strcmp(cur->name, conditional_name)) {
-			if (cur->type == CHAR || cur->type == VARCHAR) {
+			if (cur->type == _CHAR || cur->type == _VARCHAR) {
 				if (cur->length < strlen(conditional_value) - 2 && strcmp(conditional_value, "NULL")) {
 					free(_conditional);
 					strcpy(err_msg, "Conditional Length Over");
@@ -513,7 +513,7 @@ int _delete(char* conditional) {
 		char IS_NULL[5];
 		fseek(F, search_start_index + (cur->start_index), SEEK_SET);
 		switch (cur->type) {
-		case INT:
+		case _INT:
 		{
 			int i_token;
 			if (!strcmp(conditional_value, "NULL")) {
@@ -528,7 +528,7 @@ int _delete(char* conditional) {
 				conditional_search_success = 1;
 			break;
 		}
-		case FLOAT:
+		case _FLOAT:
 		{
 			float f_token;
 			char* pos;
@@ -544,7 +544,7 @@ int _delete(char* conditional) {
 				conditional_search_success = 1;
 			break;
 		}
-		case DOUBLE:
+		case _DOUBLE:
 		{
 			double d_token;
 			char* pos;
@@ -560,7 +560,7 @@ int _delete(char* conditional) {
 				conditional_search_success = 1;
 			break;
 		}
-		case CHAR:
+		case _CHAR:
 		{
 			char c_token;
 			if (!strcmp(conditional_value, "NULL")) {
@@ -574,7 +574,7 @@ int _delete(char* conditional) {
 				conditional_search_success = 1;
 			break;
 		}
-		case VARCHAR:
+		case _VARCHAR:
 		{
 			char* s_token;
 			char c_token;
@@ -657,7 +657,7 @@ int _update(char* conditional, char* set) {
 	cur = head->next;
 	while (1) {
 		if (!strcmp(cur->name, conditional_name)) {
-			if (cur->type == CHAR || cur->type == VARCHAR) {
+			if (cur->type == _CHAR || cur->type == _VARCHAR) {
 				if (cur->length < strlen(conditional_value) - 2 && strcmp(conditional_value, "NULL")) {
 					strcpy(err_msg, "Conditional Length Over");
 					free(_conditional);
@@ -670,7 +670,7 @@ int _update(char* conditional, char* set) {
 			conditional_column = cur;
 		}
 		if (!strcmp(cur->name, set_name)) {
-			if (cur->type == CHAR || cur->type == VARCHAR) {
+			if (cur->type == _CHAR || cur->type == _VARCHAR) {
 				if (cur->length < strlen(set_value) - 2 && strcmp(set_value, "NULL")) {
 					strcpy(err_msg, "Set Length Over");
 					free(_conditional);
@@ -704,7 +704,7 @@ int _update(char* conditional, char* set) {
 		char IS_NULL[5];
 		fseek(F, search_start_index + conditional_column->start_index, SEEK_SET);
 		switch (conditional_column->type) {
-		case INT:
+		case _INT:
 		{
 			int i_token;
 			if (!strcmp(conditional_value, "NULL")) {
@@ -719,7 +719,7 @@ int _update(char* conditional, char* set) {
 				conditional_search_success = 1;
 			break;
 		}
-		case FLOAT:
+		case _FLOAT:
 		{
 			float f_token;
 			char* pos;
@@ -735,7 +735,7 @@ int _update(char* conditional, char* set) {
 				conditional_search_success = 1;
 			break;
 		}
-		case DOUBLE:
+		case _DOUBLE:
 		{
 			double d_token;
 			char* pos;
@@ -751,7 +751,7 @@ int _update(char* conditional, char* set) {
 				conditional_search_success = 1;
 			break;
 		}
-		case CHAR:
+		case _CHAR:
 		{
 			char c_token;
 			if (!strcmp(conditional_value, "NULL")) {
@@ -766,7 +766,7 @@ int _update(char* conditional, char* set) {
 				conditional_search_success = 1;
 			break;
 		}
-		case VARCHAR:
+		case _VARCHAR:
 		{
 			char* s_token;
 			char c_token;
@@ -790,17 +790,17 @@ int _update(char* conditional, char* set) {
 			fseek(F, search_start_index + (set_column->start_index), SEEK_SET);
 			if (!strcmp(set_value, "NULL")) {
 				switch (set_column->type) {
-				case INT:
-				case FLOAT:
+				case _INT:
+				case _FLOAT:
 					fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 					break;
-				case DOUBLE:
+				case _DOUBLE:
 					fputc('N', F); fputc('U', F); fputc('L', F); fputc('L', F);
 					for (unsigned int i = 0; i < (set_column->length) - 4; i++)
 						fputc(pad, F);
 					break;
-				case CHAR:
-				case VARCHAR:
+				case _CHAR:
+				case _VARCHAR:
 					for (unsigned int i = 0; i < set_column->length; i++)
 						fputc(pad, F);
 					break;
@@ -808,14 +808,14 @@ int _update(char* conditional, char* set) {
 			}
 			else {
 				switch (set_column->type) {
-				case INT:
+				case _INT:
 				{
 					int i_token = atoi(set_value);
 					fwrite(&i_token, sizeof(int), 1, F);
 
 					break;
 				}
-				case DOUBLE:
+				case _DOUBLE:
 				{
 					char* pos = NULL;
 					double d_token = strtod(set_value, &pos);
@@ -823,7 +823,7 @@ int _update(char* conditional, char* set) {
 
 					break;
 				}
-				case FLOAT:
+				case _FLOAT:
 				{
 					char* pos = NULL;
 					float f_token = strtof(set_value, &pos);
@@ -831,13 +831,13 @@ int _update(char* conditional, char* set) {
 
 					break;
 				}
-				case CHAR:
+				case _CHAR:
 				{
 					char c_token = set_value[1];
 					fputc(c_token, F);
 					break;
 				}
-				case VARCHAR:
+				case _VARCHAR:
 				{
 					char* s_token = (char*)malloc(strlen(set_value) - 1);
 					unsigned int destination_index;
@@ -873,17 +873,9 @@ int _update(char* conditional, char* set) {
 	fclose(F);
 	return 0;
 }
-
-/// <summary>
-/// //////////////////
-/// </summary>
-/// <param name="conditional"></param>
-/// <param name="select"></param>
-/// <param name="result"></param>
-/// <returns></returns>
 int _select(char* conditional, char* select, char** result) {
 	char* _conditional = (char*)malloc(strlen(conditional) + 1);
-	char* conditional_name, * conditional_value;
+	char* conditional_name, * conditional_value=0;
 	int conditional_index = -1;
 	column* conditional_column = 0;
 	char* _select = (char*)malloc(strlen(select) + 1);
@@ -897,37 +889,41 @@ int _select(char* conditional, char* select, char** result) {
 	strcpy(_conditional, conditional);
 	strcpy(_select, select);
 
-	conditional_name = strtok(_conditional, "= ");
-	conditional_value = strtok(NULL, "= \0");
 
-	while (1) {
-		if (!strcmp(cur->name, conditional_name)) {
-			if (cur->type == CHAR || cur->type == VARCHAR) {
-				if (cur->length < strlen(conditional_value) - 2 && strcmp(conditional_value, "NULL")) {
-					free(_conditional);
-					free(_select);
-					strcpy(err_msg, "Conditional Length Over");
-					return -1;
+	if (strcmp(conditional, "*") != 0) {
+		conditional_name = strtok(_conditional, "= ");
+		conditional_value = strtok(NULL, "= \0");
+
+		while (1) {
+			if (!strcmp(cur->name, conditional_name)) {
+				if (cur->type == _CHAR || cur->type == _VARCHAR) {
+					if (cur->length < strlen(conditional_value) - 2 && strcmp(conditional_value, "NULL")) {
+						free(_conditional);
+						free(_select);
+						strcpy(err_msg, "Conditional Length Over");
+						return -1;
+					}
+					else {
+						if (strcmp(conditional_value, "NULL"))
+							conditional_value = strtok(conditional_value, "'");
+					}
 				}
-				else {
-					if (strcmp(conditional_value, "NULL"))
-						conditional_value = strtok(conditional_value, "'");
-				}
+				conditional_column = cur;
+				break;
 			}
-			conditional_column = cur;
-			break;
+			if (cur->next != 0)
+				cur = cur->next;
+			else
+				break;
 		}
-		if (cur->next != 0)
-			cur = cur->next;
-		else
-			break;
+		if (conditional_column == 0) {
+			free(_conditional);
+			free(_select);
+			strcpy(err_msg, "Conditional Column Not Found");
+			return -1;
+		}
 	}
-	if (conditional_column == 0) {
-		free(_conditional);
-		free(_select);
-		strcpy(err_msg, "Conditional Column Not Found");
-		return -1;
-	}
+
 	for (unsigned int i = 0; i < strlen(_select); i++) {
 		if (_select[i] == ',')
 			select_count++;
@@ -973,7 +969,7 @@ int _select(char* conditional, char* select, char** result) {
 			}
 		}
 	}
-	{
+	if (strcmp(conditional, "*") != 0)	{
 		int search_index = data_start_index;
 		int conditional_search_success = -1;
 		sdts_head = (sdts*)malloc(sizeof(sdts));
@@ -985,7 +981,7 @@ int _select(char* conditional, char* select, char** result) {
 			char IS_NULL[5];
 			fseek(F, search_index + (conditional_column->start_index), SEEK_SET);
 			switch (conditional_column->type) {
-			case INT:
+			case _INT:
 			{
 				int i_token;
 				if (!strcmp(conditional_value, "NULL")) {
@@ -1000,7 +996,7 @@ int _select(char* conditional, char* select, char** result) {
 					conditional_search_success = 1;
 				break;
 			}
-			case FLOAT:
+			case _FLOAT:
 			{
 				float f_token;
 				char* pos;
@@ -1016,7 +1012,7 @@ int _select(char* conditional, char* select, char** result) {
 					conditional_search_success = 1;
 				break;
 			}
-			case DOUBLE:
+			case _DOUBLE:
 			{
 				double d_token;
 				char* pos;
@@ -1032,7 +1028,7 @@ int _select(char* conditional, char* select, char** result) {
 					conditional_search_success = 1;
 				break;
 			}
-			case CHAR:
+			case _CHAR:
 			{
 				char c_token;
 				if (!strcmp(conditional_value, "NULL")) {
@@ -1046,7 +1042,7 @@ int _select(char* conditional, char* select, char** result) {
 					conditional_search_success = 1;
 				break;
 			}
-			case VARCHAR:
+			case _VARCHAR:
 			{
 				char* s_token;
 				char c_token;
@@ -1094,7 +1090,7 @@ int _select(char* conditional, char* select, char** result) {
 					new_sdts->next = 0;
 					fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
 					switch (select_column[i]->type) {
-					case INT:
+					case _INT:
 					{
 						int i_token;
 						fread(IS_NULL, 4, 1, F);
@@ -1111,7 +1107,7 @@ int _select(char* conditional, char* select, char** result) {
 						}
 						break;
 					}
-					case FLOAT:
+					case _FLOAT:
 					{
 						float f_token;
 						fread(IS_NULL, 4, 1, F);
@@ -1129,7 +1125,7 @@ int _select(char* conditional, char* select, char** result) {
 						}
 						break;
 					}
-					case DOUBLE:
+					case _DOUBLE:
 					{
 						double d_token;
 						fread(IS_NULL, 4, 1, F);
@@ -1146,7 +1142,7 @@ int _select(char* conditional, char* select, char** result) {
 						}
 						break;
 					}
-					case CHAR:
+					case _CHAR:
 					{
 						IS_NULL[0] = fgetc(F);
 						if (IS_NULL[0] == pad) {
@@ -1162,7 +1158,7 @@ int _select(char* conditional, char* select, char** result) {
 						break;
 
 					}
-					case VARCHAR:
+					case _VARCHAR:
 					{
 						char* s_token;
 						IS_NULL[0] = fgetc(F);
@@ -1198,6 +1194,127 @@ int _select(char* conditional, char* select, char** result) {
 			strcpy(err_msg, "Conditional Value Not Found");
 			return -1;
 		}
+	}
+
+	else {
+		int search_index = data_start_index;
+		char IS_NULL[5];
+		sdts* new_sdts;
+		sdts_head = (sdts*)malloc(sizeof(sdts));
+		sdts_head->str = 0;
+		sdts_head->next = 0;
+		sdts_tail = sdts_head;
+		F = fopen(_file_location, "r");
+		while (search_index < data_end_index) {
+			result_count++;
+			for (int i = 0; i < select_count; i++) {
+				strcpy(IS_NULL, "\0");
+				new_sdts = (sdts*)malloc(sizeof(sdts));
+				if (new_sdts == 0) {
+					free(_conditional);
+					free(_select);
+					free(select_column);
+					sdts_free(sdts_head);
+					fclose(F);
+					strcpy(err_msg, "Memory Allocaiton Failed");
+					return -1;
+				}
+				new_sdts->next = 0;
+				fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
+				switch (select_column[i]->type) {
+				case _INT:
+				{
+					int i_token;
+					fread(IS_NULL, 4, 1, F);
+					IS_NULL[4] = '\0';
+					if (!strcmp(IS_NULL, "NULL")) {
+						new_sdts->str = (char*)malloc(5);
+						strcpy(new_sdts->str, "NULL");
+					}
+					else {
+						fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
+						fread(&i_token, sizeof(int), 1, F);
+						new_sdts->str = (char*)malloc(11);
+						sprintf(new_sdts->str, "%d", i_token);
+					}
+					break;
+				}
+				case _FLOAT:
+				{
+					float f_token;
+					fread(IS_NULL, 4, 1, F);
+					IS_NULL[4] = '\0';
+					if (!strcmp(IS_NULL, "NULL")) {
+						new_sdts->str = (char*)malloc(5);
+						strcpy(new_sdts->str, "NULL");
+					}
+					else {
+						fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
+						fread(&f_token, sizeof(float), 1, F);
+						new_sdts->str = (char*)malloc(31);
+						sprintf(new_sdts->str, "%.5f", f_token);
+
+					}
+					break;
+				}
+				case _DOUBLE:
+				{
+					double d_token;
+					fread(IS_NULL, 4, 1, F);
+					IS_NULL[4] = '\0';
+					if (!strcmp(IS_NULL, "NULL")) {
+						new_sdts->str = (char*)malloc(5);
+						strcpy(new_sdts->str, "NULL");
+					}
+					else {
+						fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
+						fread(&d_token, sizeof(double), 1, F);
+						new_sdts->str = (char*)malloc(31);
+						sprintf(new_sdts->str, "%.12lf", d_token);
+					}
+					break;
+				}
+				case _CHAR:
+				{
+					IS_NULL[0] = fgetc(F);
+					if (IS_NULL[0] == pad) {
+						new_sdts->str = (char*)malloc(5);
+						strcpy(new_sdts->str, "NULL");
+					}
+					else {
+						fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
+						new_sdts->str = (char*)malloc(2);
+						new_sdts->str[0] = fgetc(F);
+						new_sdts->str[1] = '\0';
+					}
+					break;
+
+				}
+				case _VARCHAR:
+				{
+					char* s_token;
+					IS_NULL[0] = fgetc(F);
+					if (IS_NULL[0] == pad) {
+						new_sdts->str = (char*)malloc(5);
+						strcpy(new_sdts->str, "NULL");
+					}
+					else {
+						fseek(F, search_index + select_column[i]->start_index, SEEK_SET);
+						s_token = (char*)malloc((select_column[i]->length) + 1);
+						fread(s_token, select_column[i]->length, 1, F);
+						s_token = strtok(s_token, pad_seprator);
+						new_sdts->str = (char*)malloc(strlen(s_token) + 1);
+						strcpy(new_sdts->str, s_token);
+					}
+					break;
+				}
+				}
+				sdts_tail->next = new_sdts;
+				sdts_tail = new_sdts;
+			}
+			search_index += data_line_length;
+		}
+
 	}
 
 	{
@@ -1250,20 +1367,20 @@ void print_column() {
 		printf("컬럼명 : %s\n", cur->name);
 		printf("컬럼타입 : ");
 		switch (cur->type) {
-		case CHAR:
+		case _CHAR:
 			printf("char\n");
 			break;
-		case VARCHAR:
+		case _VARCHAR:
 			printf("varchar\n");
 			printf("길이제한 : %d\n", cur->length);
 			break;
-		case INT:
+		case _INT:
 			printf("int\n");
 			break;
-		case FLOAT:
+		case _FLOAT:
 			printf("float\n");
 			break;
-		case DOUBLE:
+		case _DOUBLE:
 			printf("double\n");
 			break;
 		}
@@ -1293,63 +1410,63 @@ int print_data() {
 			char IS_NULL[5] = "    \0";
 			cur = cur->next;
 			switch (cur->type) {
-			case INT:
+			case _INT:
 			{
 				int i_token;
 				fread(IS_NULL, sizeof(char), 4, F);
 				fseek(F, -4, SEEK_CUR);
 				if (!strcmp(IS_NULL, "NULL")) {
-					printf("\t(NULL)");
+					printf("    (NULL)");
 					fseek(F, sizeof(int), SEEK_CUR);
 				}
 				else {
 					fread(&i_token, sizeof(int), 1, F);
-					printf("\t%d", i_token);
+					printf("    %d", i_token);
 				}
 
 				break;
 			}
-			case FLOAT:
+			case _FLOAT:
 			{
 				float f_token;
 				fread(IS_NULL, sizeof(char), 4, F);
 				fseek(F, -4, SEEK_CUR);
 				if (!strcmp(IS_NULL, "NULL")) {
-					printf("\t(NULL)");
+					printf("    (NULL)");
 					fseek(F, sizeof(float), SEEK_CUR);
 				}
 				else {
 					fread(&f_token, sizeof(float), 1, F);
-					printf("\t%.5f", f_token);
+					printf("    %.5f", f_token);
 				}
 				break;
 			}
-			case DOUBLE:
+			case _DOUBLE:
 			{
 				double d_token;
 				fread(IS_NULL, sizeof(char), 4, F);
 				fseek(F, -4, SEEK_CUR);
 				if (!strcmp(IS_NULL, "NULL")) {
-					printf("\t(NULL)");
+					printf("    (NULL)");
 					fseek(F, sizeof(double), SEEK_CUR);
 				}
 				else {
 					fread(&d_token, sizeof(double), 1, F);
-					printf("\t%.12lf", d_token);
+					printf("    %.12lf", d_token);
 				}
 				break;
 			}
-			case CHAR:
+			case _CHAR:
 			{
 				char c_token;
 				c_token = fgetc(F);
 				if (c_token == pad)
-					printf("\t(NULL)");
+					printf("    (NULL)");
 				else
-					printf("\t%c", c_token);
+					printf("    %c", c_token);
 				break;
 			}
-			case VARCHAR:
+			case _VARCHAR:
 			{
 				char* s_token;
 				char* string;
@@ -1361,11 +1478,11 @@ int print_data() {
 				fread(s_token, cur->length, 1, F);
 				s_token[cur->length] = '\0';
 				if (s_token[0] == pad) {
-					printf("\t(NULL)");
+					printf("    (NULL)");
 				}
 				else {
 					string = strtok(s_token, pad_seprator);
-					printf("\t%s", string);
+					printf("    %s", string);
 				}
 				break;
 			}
@@ -1402,7 +1519,7 @@ void recursive_column_free_function(column* node) {
 void file_column_free() {
 	column* node = head;
 	recursive_column_free_function(head);
-	if (select_result_str != NULL)
+	if (select_result_str != NULL|| select_result_str !=0)
 		free(select_result_str);
 	free(_file_location);
 	head = 0;
@@ -1410,4 +1527,5 @@ void file_column_free() {
 	data_start_index = 0;
 	data_end_index = 0;
 	data_line_length = 0;
+	select_result_str = 0;
 }

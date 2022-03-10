@@ -322,7 +322,6 @@ void Init_SampleData(void)
 		return -1;
 	}
 
-	int num_jaego_List = 6;
 	//print_data();
 	//printf("\n");
 

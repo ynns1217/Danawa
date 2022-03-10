@@ -1,15 +1,6 @@
 #ifndef __STRUCT_H__
 #define __STRUCT_H__
 
-// 재고조회에 사용될 구조체
-
-void Create(void);
-void Init_SampleData(void);
-void Insert(void);
-void edit_minus_table(void);		////생산 넘겨주며 수량 하나씩 빼고 넘겨주기
-void edit_plus_table(void);			////입고한 수량만큼 더해주기
-void jaego_print1(void);			////최종 재고 수량 출력해서 조회
-
 
 typedef struct jaego					// 재고 조회 구조체
 {
