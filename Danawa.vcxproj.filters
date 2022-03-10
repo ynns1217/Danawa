@@ -32,13 +32,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="local.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MiniProject_ERP_struct_warehousing.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="struct_jaego.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="local.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

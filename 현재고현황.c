@@ -43,9 +43,10 @@ int main() {
 			// (모든 조건 검색해서 하나라도 있으면 생산하러가고 갯수 하나씩 줄이기)
 			//재고 0 이면 발주로 보내고 입고 받은 재고번호 받아서 update
 
+			
+			//ibgo_jaego_print1();
 
-			ibgo_jaego_print1();
-			//chulgo_jaego_print();
+			chulgo_jaego_print();
 
 			break;
 
