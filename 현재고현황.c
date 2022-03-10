@@ -43,10 +43,38 @@ int main() {
 			// (모든 조건 검색해서 하나라도 있으면 생산하러가고 갯수 하나씩 줄이기)
 			//재고 0 이면 발주로 보내고 입고 받은 재고번호 받아서 update
 
-			
-			//ibgo_jaego_print1();
 
-			chulgo_jaego_print();
+			 //jogun();
+			
+			//if (jaego_item <= 0)
+			//{
+			//	printf("발주하러 가자이\n");
+			//	printf("\n");
+
+			//ibgo_jaego_print();
+
+			//	printf("\n");
+			//	printf("\n");
+			//	break;
+			//}
+
+			int a= chulgo_jaego_print();
+			if (a >0)
+			{
+				printf("생산하러가자이\n");
+				system("pause");
+
+			}
+			else
+			{
+				printf("%d개 발주하러가자이\n", a);
+				ibgo_jaego_print();
+			}
+			//else
+			//{
+			//	printf("\n");
+			//	printf("생산하러 가자이\n");
+			//	printf("\n");
 
 			break;
 

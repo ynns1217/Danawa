@@ -1,9 +1,13 @@
 #include<stdio.h>
 #include<time.h>
 #include<stdbool.h>
+#include<stdbool.h>
 #include "local.h"
 #include "struct_jaego.h"
 #include "MiniProject_ERP_struct_warehousing.h"
+#define True >=1
+#define False 0
+
 
 #pragma warning(disable:4996)
 
@@ -129,9 +133,8 @@ int jaego_print()
 	file_column_free();
 
 }
-
 //입고 정보를 불러와서 입고재고에 업데이트
-void ibgo_jaego_print1()
+void ibgo_jaego_print()
 {
 	result* _result;
 	result* find;
@@ -250,7 +253,6 @@ void ibgo_jaego_print1()
 	jaego_print();
 }
 
-
 void chulgo_jaego_print()
 {
 	result* _result;
@@ -280,13 +282,8 @@ void chulgo_jaego_print()
 		return -1;
 	}
 
-
-	print_data();
-	printf("\n");
-
 	for (int select_List = 1; select_List < 7; select_List++)
 	{
-
 
 		char select_num_chulgoList[100] = "num_jaego=";
 		itoa(select_List, temp_int, 10);
@@ -361,19 +358,34 @@ void chulgo_jaego_print()
 		strcat(Parameter_Insert, temp_int);
 		strcat(Parameter_Insert, ", ");
 
+
 		// 총 재고수량
 		int jaego_data = gicho_data + num_InWarehouse - chulgo_data;
+		int bujok = chulgo_data - jaego_data;
 		itoa(jaego_data, temp_int, 10);
 		strcat(Parameter_Insert, temp_int);
 
 
 	
-
 		char update_num[100] = "chulgo_item=";
+		char update_num_jaego[100] = "jaego_item=";
+
+
+		if (jaego_data < 0)
+		{
+			itoa(0, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+			strcat(update_num_jaego, temp_int);
+			if (_update(select_num_chulgoList, update_num_jaego) == -1)
+			{
+				printf("%s\n", err_msg);
+				file_column_free();
+				return -1;
+			}
+		}
+
 
 		itoa(chulgo_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
 		strcat(update_num, temp_int);
-
 		// 입고한 다음 입고 재고 수량 을 업데이트한다
 		if (_update(select_num_chulgoList, update_num) == -1)
 		{
@@ -382,8 +394,19 @@ void chulgo_jaego_print()
 			return -1;
 		}
 
+		if (jaego_data < chulgo_data)
+		{
+			printf("%s가 %d개 이상 필요합니다.\n", *(_result->next->_string_data), bujok);
+			break;
+		}
+		else
+			printf("생산 가능합니다.\n");
+
 	}
+
 	file_column_free();
 
 	jaego_print();
 }
+
+
