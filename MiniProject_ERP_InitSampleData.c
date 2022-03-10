@@ -278,7 +278,7 @@ void Init_SampleData(void)
 		return -1;
 	}
 
-	if (_insert("1, 'CPU', 'CP10', 'Warehouse1', 1999, 'CP20220308', 20220305, 10, 10, 1, 0") == -1)
+	if (_insert("1, 'CPU', 'CP10', 'Warehouse1', 1999, 'CP20220308', 20220305, 0, 0, 0, 0") == -1)
 	{
 		printf("%s\n", err_msg);
 

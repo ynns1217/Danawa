@@ -1,7 +1,5 @@
 #include<stdio.h>
 #include<time.h>
-#include<stdbool.h>
-#include<stdbool.h>
 #include "local.h"
 #include "struct_jaego.h"
 #include "MiniProject_ERP_struct_warehousing.h"
@@ -92,6 +90,7 @@ int jaego_print()
 		itoa(chogi_data, temp_int, 10);
 		strcat(Parameter_Insert, temp_int);
 		strcat(Parameter_Insert, ", ");
+
 
 		// 입고재고수량
 		int num_InWarehouse = *(_result->next->next->next->next->next->_int_data);
@@ -237,9 +236,29 @@ void ibgo_jaego_print()
 		return -1;
 	}
 
+	if (_select(select_num_IbgoList, "ibgo_item", &select_result_str) == -1) {
+		printf("%s\n", err_msg);
+		system("pause");
+		file_column_free();
+		return -1;
+	}
+
+	if ((result_count = recv_result(&_result, select_result_str)) == -1) {
+		printf("%s\n", err_msg);
+		system("pause");
+		file_column_free();
+		return -1;
+	}
+
+
+	// ibgo_item
+	itoa(*(_result->_int_data), temp_int, 10);
+	strcat(Parameter_Insert, temp_int);
+
+	int update_num_after = *(_result->_int_data) + num_InWarehouse;
 	char update_num[100] = "ibgo_item=";
 
-	itoa(num_InWarehouse, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+	itoa(update_num_after, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
 	strcat(update_num, temp_int);
 
 	// 입고한 다음 입고 재고 수량 을 업데이트한다
@@ -249,12 +268,11 @@ void ibgo_jaego_print()
 		file_column_free();
 		return -1;
 	}
-
+	result_free(_result, result_count);
 	file_column_free();
 
 	jaego_print();
 }
-
 
 
 void chulgo_jaego_print()
