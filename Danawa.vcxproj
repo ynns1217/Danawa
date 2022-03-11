@@ -142,6 +142,7 @@
     <ClCompile Include="client.c" />
     <ClCompile Include="jaego_fuc.c" />
     <ClCompile Include="MiniProject_ERP_InitSampleData.c" />
+    <ClCompile Include="MiniProject_ERP_order.c" />
     <ClCompile Include="server.c" />
     <ClCompile Include="현재고현황.c" />
   </ItemGroup>

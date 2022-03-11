@@ -72,7 +72,7 @@ int main() {
 				printf("======================================\n");
 				printf("발주하러가자이\n");
 				printf("======================================\n");
-				ibgo_jaego_print();
+				insertOrderData();
 			}
 			//else
 			//{

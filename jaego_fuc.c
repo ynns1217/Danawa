@@ -294,6 +294,8 @@ void ibgo_jaego_print()
 
 }
 
+
+//출고 함수
 void chulgo_jaego_print()
 {
 	result* _result;
@@ -482,3 +484,6 @@ void chulgo_jaego_print()
 	jaego_print();
 
 }
+
+
+//
