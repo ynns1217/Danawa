@@ -60,7 +60,7 @@ int main() {
 			break;
 
 		case 3:
-			choijong_jaego_print();
+			choijong_jaego_print_all();
 			jaego_print();
 			break;
 

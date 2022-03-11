@@ -152,7 +152,7 @@ int jaego_print()
 }
 
 //사용한자재 정보를 불러와서 최종 재고에 업데이트 
-void choijong_jaego_print()
+void choijong_jaego_print(char n[100])
 {
 	result* _result;
 	result* find;
@@ -179,14 +179,8 @@ void choijong_jaego_print()
 	}
 
 
-	print_data();
-	printf("\n");
-
-	printf("\n사용한 재고 정보를 불러올 품목 번호 를 선택해주세요 : ");
-	scanf("%s", Select_item_num);
-
 	strcat(select_num_chulgoList, "\'");
-	strcat(select_num_chulgoList, Select_item_num);
+	strcat(select_num_chulgoList, n);
 	strcat(select_num_chulgoList, "\'");
 
 	if (_select(select_num_chulgoList, "Amountused", &select_result_str) == -1) {
@@ -209,8 +203,6 @@ void choijong_jaego_print()
 	strcat(Parameter_Insert, temp_int);
 
 
-	printf("%s\n", Parameter_Insert);
-	system("pause");
 
 	file_column_free();
 	result_free(_result, result_count);
@@ -227,7 +219,7 @@ void choijong_jaego_print()
 
 	char select_numList[100] = "num_item=";
 	strcat(select_numList, "\'");
-	strcat(select_numList, Select_item_num);
+	strcat(select_numList, n);
 	strcat(select_numList, "\'");
 
 	if (_select(select_numList, "chulgo_item", &select_result_str) == -1) {
@@ -250,10 +242,6 @@ void choijong_jaego_print()
 	itoa(Amountused, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
 	strcat(update_num, temp_int);
 
-	printf("%s\n", update_num);
-	system("pause");
-
-
 	// 출고한 다음 입고 재고 수량 을 업데이트한다
 	if (_update(select_numList, update_num) == -1)
 	{
@@ -267,6 +255,16 @@ void choijong_jaego_print()
 
 	jaego_print();
 
+}
+
+void choijong_jaego_print_all()
+{
+	choijong_jaego_print("CP10");
+	choijong_jaego_print("HR10");
+	choijong_jaego_print("KE10");
+	choijong_jaego_print("MO10");
+	choijong_jaego_print("CA10");
+	choijong_jaego_print("MB10");
 }
 
 //생산할 수 있는지 확인하는 함수
