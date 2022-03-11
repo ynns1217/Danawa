@@ -111,11 +111,31 @@ int jaego_print()
 
 		char update_rest_num[100] = "jaego_item=";
 
+		if (jaego_data < 0)								//재고가 마이너스로 떨어질 때
+		{
+			printf("======================================\n");
+			printf("재고 수량이 부족하므로 0으로 초기화 합니다.");
+			printf("======================================\n");
+			jaego_data = 0;
+
+			itoa(jaego_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+			strcat(update_rest_num, temp_int);
+
+			// 재고 수량 을 업데이트한다
+			if (_update(select_num_List, update_rest_num) == -1)
+			{
+				printf("%s\n", err_msg);
+
+				file_column_free();
+				return -1;
+			}
+
+		}
+
 		itoa(jaego_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
 		strcat(update_rest_num, temp_int);
 
-
-		// 입고한 다음 입고 수량 을 업데이트한다
+		// 재고 수량 을 업데이트한다
 		if (_update(select_num_List, update_rest_num) == -1)
 		{
 			printf("%s\n", err_msg);
@@ -132,9 +152,7 @@ int jaego_print()
 	file_column_free();
 
 }
-
-
-//입고 정보를 불러와서 입고재고에 업데이트
+//입고 정보를 불러와서 입고재고에 업데이트 
 void ibgo_jaego_print()
 {
 	result* _result;
@@ -222,8 +240,7 @@ void ibgo_jaego_print()
 	system("pause");
 
 	file_column_free();
-
-							
+					
 	result_free(_result, result_count);	
 
 
@@ -261,6 +278,8 @@ void ibgo_jaego_print()
 	itoa(update_num_after, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
 	strcat(update_num, temp_int);
 
+
+
 	// 입고한 다음 입고 재고 수량 을 업데이트한다
 	if (_update(select_num_IbgoList, update_num) == -1)
 	{
@@ -272,8 +291,8 @@ void ibgo_jaego_print()
 	file_column_free();
 
 	jaego_print();
-}
 
+}
 
 void chulgo_jaego_print()
 {
@@ -295,7 +314,7 @@ void chulgo_jaego_print()
 	char select_num_chulgoList[100] = "num_item=";
 
 
-	// 입고리스트 출력 및 정보 받아오기
+	// 재고리스트 출력 및 정보 받아오기
 	if (initalizing("Jaego") == -1)
 	{
 		printf("%s\n", err_msg);
@@ -332,7 +351,7 @@ void chulgo_jaego_print()
 
 		printf("%s를 출고합니다\n", *(_result->next->_string_data));
 
-		// 출고재고수량 입력
+		// 출고 재고수량 입력
 		int chulgo_data = 0;
 		printf("출고수량을 입력하세요 : ");
 		scanf("%d", &chulgo_data);
@@ -380,37 +399,26 @@ void chulgo_jaego_print()
 		strcat(Parameter_Insert, temp_int);
 		strcat(Parameter_Insert, ", ");
 
-
 		// 총 재고수량
-		int jaego_data = gicho_data + num_InWarehouse - chulgo_data;
-		int bujok = chulgo_data - jaego_data;
+		int can_use_data = gicho_data + num_InWarehouse;				//지금 당장 사용할 수 있는 재고
+		int jaego_data = can_use_data - chulgo_data;
 		itoa(jaego_data, temp_int, 10);
 		strcat(Parameter_Insert, temp_int);
 
 
-	
+
 		char update_num[100] = "chulgo_item=";
 		char update_num_jaego[100] = "jaego_item=";
 
 
-		if (jaego_data < 0)
+		if (jaego_data < 0 || can_use_data < chulgo_data)					//재고가 0이거나 출고 수량 보다 작으면 발주 해야된다
 		{
-			jaego_data = 0;
-			itoa(jaego_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
-			strcat(update_num_jaego, temp_int);
-			if (_update(select_num_chulgoList, update_num_jaego) == -1)
-			{
-				printf("%s\n", err_msg);
-				file_column_free();
-				return -1;
-			}
-		}
+			//출고 업데이트 
 
-		else
-		{
-			itoa(chulgo_data, temp_int, 10);		// 받아온 정보가 int형이므로 문자열로 형변환수행
+			itoa(chulgo_data, temp_int, 10);						// 받아온 정보가 int형이므로 문자열로 형변환수행
 			strcat(update_num, temp_int);
-			// 입고한 다음 입고 재고 수량 을 업데이트한다
+
+			// 출고한 다음 출고 재고 수량 을 업데이트한다
 			if (_update(select_num_chulgoList, update_num) == -1)
 			{
 				printf("%s\n", err_msg);
@@ -418,18 +426,59 @@ void chulgo_jaego_print()
 				return -1;
 			}
 
-		}
-		if (jaego_data < chulgo_data)
-		{
-			printf("%s가 %d개 이상 필요합니다.\n", *(_result->next->_string_data), bujok);
+			if (jaego_data == 0)
+			{
+				int bujok = chulgo_data;
+				printf("======================================\n");
+				printf("%s가 %d개 이상 필요합니다.\n", *(_result->next->_string_data), bujok);
+				printf("======================================\n");
+
+				return bujok;
+			}
+			else if (can_use_data < chulgo_data)
+			{
+				jaego_data = 0;												//재고에는 마이너스 수량이 안되게 0을 넣어준다.
+				itoa(jaego_data, temp_int, 10);								// 받아온 정보가 int형이므로 문자열로 형변환수행
+				strcat(update_num_jaego, temp_int);
+
+				if (_update(select_num_chulgoList, update_num_jaego) == -1)
+				{
+					printf("%s\n", err_msg);
+					file_column_free();
+					return -1;
+				}
+
+				int bujok = chulgo_data - can_use_data;
+				printf("======================================\n");
+				printf("%s가 %d개 이상 필요합니다.\n", *(_result->next->_string_data), bujok);
+				printf("======================================\n");
+			}
+
 			break;
 		}
-		else
-			printf("생산 가능합니다.\n");
 
+		else if(can_use_data >=chulgo_data)														//출고 가능할 때 
+		{
+			itoa(chulgo_data, temp_int, 10);						// 받아온 정보가 int형이므로 문자열로 형변환수행
+			strcat(update_num, temp_int);
+																	// 출고한 다음 출고 재고 수량 을 업데이트한다
+			if (_update(select_num_chulgoList, update_num) == -1)
+			{
+				printf("%s\n", err_msg);
+				file_column_free();
+				return -1;
+			}
+			printf("======================================\n");
+			printf("생산 가능합니다.\n");
+			printf("======================================\n");
+			
+			if (select_List == 6)
+				return 5050;
+		}
 	}
 
 	file_column_free();
 
 	jaego_print();
+
 }
