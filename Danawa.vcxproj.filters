@@ -18,31 +18,31 @@
     <ClCompile Include="현재고현황.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MiniProject_ERP_InitSampleData.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="jaego_fuc.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="server.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="client.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MiniProject_ERP_order.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MiniProject_ERP_1InitSampleData.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="client.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="server.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MiniProject_ERP_struct_warehousing.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="struct_jaego.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="local.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniProject_ERP_1struct.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

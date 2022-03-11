@@ -2,7 +2,7 @@
 #include<time.h>
 #include "local.h"
 #include "struct_jaego.h"
-#include "MiniProject_ERP_struct_warehousing.h"
+#include "MiniProject_ERP_1struct.h"
 
 #pragma warning(disable:4996)
 
@@ -20,7 +20,7 @@ int main() {
 
 
 		printf("\t재고관리\n");
-		printf("1.현 재고 현황 2.재고 이동 \n");
+		printf("1.현 재고 현황 2.재고 이동 3. 최종 재고현황(자재사용후) = 현 재고 현황\n");
 		printf("======================================\n");
 
 		scanf("%d", &option1);
@@ -57,6 +57,11 @@ int main() {
 				insertOrderData();
 			}
 
+			break;
+
+		case 3:
+			choijong_jaego_print();
+			jaego_print();
 			break;
 
 		default:

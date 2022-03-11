@@ -141,14 +141,14 @@
   <ItemGroup>
     <ClCompile Include="client.c" />
     <ClCompile Include="jaego_fuc.c" />
-    <ClCompile Include="MiniProject_ERP_InitSampleData.c" />
+    <ClCompile Include="MiniProject_ERP_1InitSampleData.c" />
     <ClCompile Include="MiniProject_ERP_order.c" />
     <ClCompile Include="server.c" />
     <ClCompile Include="현재고현황.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="local.h" />
-    <ClInclude Include="MiniProject_ERP_struct_warehousing.h" />
+    <ClInclude Include="MiniProject_ERP_1struct.h" />
     <ClInclude Include="struct_jaego.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
