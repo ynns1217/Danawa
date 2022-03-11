@@ -259,12 +259,12 @@ void choijong_jaego_print(char n[100])
 
 void choijong_jaego_print_all()
 {
-	choijong_jaego_print("CP10");
-	choijong_jaego_print("HR10");
-	choijong_jaego_print("KE10");
-	choijong_jaego_print("MO10");
-	choijong_jaego_print("CA10");
-	choijong_jaego_print("MB10");
+				choijong_jaego_print("CP10");
+				choijong_jaego_print("HR10");
+				choijong_jaego_print("KE10");
+				choijong_jaego_print("MO10");
+				choijong_jaego_print("CA10");
+				choijong_jaego_print("MB10");
 }
 
 //생산할 수 있는지 확인하는 함수
