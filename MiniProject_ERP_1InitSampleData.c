@@ -303,6 +303,18 @@ void Init_SampleData(void)
 		return -1;
 	}
 
+	if (_insert("'1000', 'CA10', '미들형본체', 5 , 5, '9'") == -1)
+	{
+		printf("%s\n", err_msg);
+
+		file_column_free();
+		return -1;
+	}
+
+	//_create("Work_Use", "Work_Instruction_Number VARCHAR(20) Item_Number VARCHAR(20) Name VARCHAR(20) Amountused INT Performanced_number INT LOT_NO VARCHAR(20)");
+
+
+
 	file_column_free();
 
 
